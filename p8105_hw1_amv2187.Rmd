@@ -14,7 +14,7 @@ library(tidyverse)
 
 ## Problem 1
 
-```{r p1}
+```{r p1, warning=FALSE}
 n = 10 # 10 rows in the following tbl_df
 
 # Create tbl_df 
@@ -25,11 +25,32 @@ p1_df = tibble(
   factor_vec = c(rep('Y', n/2), rep('N', n/2)) # factor vector of length 10
 )
 
+head(p1_df) # show first few rows of p1_df
+
 # Take mean of each column
-mean(p1_df$unif_10)
-mean(p1_df$greater_than_2)
-mean(p1_df$char_vec)
-mean(p1_df$factor_vec)
+avg_num = mean(p1_df$unif_10)
+avg_logical = mean(p1_df$greater_than_2)
+avg_char = mean(p1_df$char_vec)
+avg_factor = mean(p1_df$factor_vec)
+
+# Print column means
+print(c(avg_num, avg_logical, avg_char, avg_factor))
 ```
 
 Taking the mean of the numeric and logical vectors in 'p1_df' is successful; taking the mean of the character and factor vectors is not. This is intuitive for the numeric vector. In the case of the logical vector, the function base::mean automatically converts logical TRUE/FALSE to numeric 1/0, and takes the arithmetic average. Conversely, characters and factors cannot be converted to a numeric format in any default way, and thus taking the mean cannot be done. 
+
+The following code attempts to convert the logical, character, and factor vectors to numeric class. The logical vector successfully convert TRUE to 1 and FALSE to 0. The character and factor vectors are unable to convert to numeric, and instead return a list of NAs.
+
+```{r p1.2, results='hide', warning=FALSE}
+as.numeric(p1_df$greater_than_2)
+as.numeric(p1_df$char_vec)
+as.numeric(p1_df$factor_vec)
+```
+The next chunk converts character->factor->numeric (successfully!), and factor->character->numeric (unsuccessfully). 
+
+```{r, results='hide', warning=FALSE}
+as.numeric(as.factor(p1_df$char_vec))
+as.numeric(as.character(p1_df$factor_vec))
+```
+
+
