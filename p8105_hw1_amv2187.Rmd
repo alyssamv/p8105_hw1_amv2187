@@ -17,6 +17,8 @@ library(tidyverse)
 ```{r p1, warning=FALSE}
 n = 10 # 10 rows in the following tbl_df
 
+set.seed(1) # set a seed for reproducibility
+
 # Create tbl_df 
 p1_df = tibble(
   unif_10 = runif(n = n, min = 0, max = 5), # random vector of size 10 selected from uniform [0,5]
@@ -54,3 +56,22 @@ as.numeric(as.character(p1_df$factor_vec))
 ```
 
 
+## Problem 2
+
+```{r p2}
+n = 1000 # number of rows in new data frame
+
+set.seed(1) 
+
+# Create tbl_df
+p2_df = tibble(
+  x = rnorm(n = n),
+  y = rnorm(n = n),
+  sum_gt_0 = (x + y > 0), # logical vector. TRUE if x+y>0, FALSE otherwise
+  num_vec = as.numeric(sum_gt_0), # coerced numeric vector of sum_gt_0
+  factor_vec = as.factor(sum_gt_0) # coerced character vector of sum_gt_0
+)
+
+```
+
+The number of observations (rows) and variables (columns) in this data frame is (`r dim(p2_df)`), respectively. The mean of x is `r mean(p2_df$x)`; the median of x is `r median(p2_df$x)`. The proportions of observations for which `x + y > 0` is `r sum(p2_df$num_vec)/n`.
