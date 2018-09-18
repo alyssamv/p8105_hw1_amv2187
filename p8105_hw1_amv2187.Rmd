@@ -39,16 +39,21 @@ avg_factor = mean(p1_df$factor_vec)
 print(c(avg_num, avg_logical, avg_char, avg_factor))
 ```
 
-Taking the mean of the numeric and logical vectors in 'p1_df' is successful; taking the mean of the character and factor vectors is not. This is intuitive for the numeric vector. In the case of the logical vector, the function base::mean automatically converts logical TRUE/FALSE to numeric 1/0, and takes the arithmetic average. Conversely, characters and factors cannot be converted to a numeric format in any default way, and thus taking the mean cannot be done. 
+
+Taking the mean of the numeric and logical vectors in `p1_df` is successful; taking the mean of the character and factor vectors is not. This is intuitive for the numeric vector. In the case of the logical vector, the function base::mean automatically converts logical TRUE/FALSE to numeric 1/0, and takes the arithmetic average. Conversely, characters and factors cannot be converted to a numeric format in any default way, and thus taking the mean cannot be done. 
 
 The following code attempts to convert the logical, character, and factor vectors to numeric class. The logical vector successfully convert TRUE to 1 and FALSE to 0. The character and factor vectors are unable to convert to numeric, and instead return a list of NAs.
+
 
 ```{r p1.2, results='hide', warning=FALSE}
 as.numeric(p1_df$greater_than_2)
 as.numeric(p1_df$char_vec)
 as.numeric(p1_df$factor_vec)
 ```
+
+
 The next chunk converts character->factor->numeric (successfully!), and factor->character->numeric (unsuccessfully). 
+
 
 ```{r, results='hide', warning=FALSE}
 as.numeric(as.factor(p1_df$char_vec))
@@ -61,7 +66,7 @@ as.numeric(as.character(p1_df$factor_vec))
 ```{r p2}
 n = 1000 # number of rows in new data frame
 
-set.seed(1) 
+#set.seed(1) 
 
 # Create tbl_df
 p2_df = tibble(
@@ -74,4 +79,32 @@ p2_df = tibble(
 
 ```
 
+
 The number of observations (rows) and variables (columns) in this data frame is (`r dim(p2_df)`), respectively. The mean of x is `r mean(p2_df$x)`; the median of x is `r median(p2_df$x)`. The proportions of observations for which `x + y > 0` is `r sum(p2_df$num_vec)/n`.
+
+
+```{r scatterplot}
+plot_1 = ggplot(data = p2_df, aes(x = x, y = y, color = sum_gt_0)) +
+  geom_point() + 
+  ggtitle('Scatterplot 1: Color using logical vector') +
+  labs(color = 'x + y > 0')
+plot_1
+
+ggplot(data = p2_df, aes(x = x, y = y, color = num_vec)) +
+  geom_point() + 
+  ggtitle('Scatterplot 2: Color using numeric vector') +
+  labs(color = 'x + y > 0')
+
+ggplot(data = p2_df, aes(x = x, y = y, color = factor_vec)) +
+  geom_point() + 
+  ggtitle('Scatterplot 3: Color using factor vector') +
+  labs(color = 'x + y > 0')
+```
+
+As can be seen from the plots, color is assigned in a binary fashion to the logical and factor variables, whereas the numeric vector assigns color on a gradient.
+
+```{r, results='hide'}
+getwd()
+ggsave("scatterplot_1.pdf", plot = plot_1, height = 4, width = 6)
+```
+
