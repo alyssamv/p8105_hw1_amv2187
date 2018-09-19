@@ -22,7 +22,7 @@ set.seed(1) # set a seed for reproducibility
 # Create tbl_df 
 p1_df = tibble(
   unif_10 = runif(n = n, min = 0, max = 5), # random vector of size 10 selected from uniform [0,5]
-  greater_than_2 = ifelse(unif_10 > 2, T, F), # logical vector. TRUE if value generated in unif_10 greater than 2; FALSE if less than or equal to 2
+  greater_than_2 = (unif_10 > 2), # logical vector. TRUE if value generated in unif_10 greater than 2; FALSE if less than or equal to 2
   char_vec = rep('a', n), # character vector of length 10,
   factor_vec = c(rep('Y', n/2), rep('N', n/2)) # factor vector of length 10
 )
@@ -40,7 +40,7 @@ print(c(avg_num, avg_logical, avg_char, avg_factor))
 ```
 
 
-Taking the mean of the numeric and logical vectors in `p1_df` is successful; taking the mean of the character and factor vectors is not. This is intuitive for the numeric vector. In the case of the logical vector, the function base::mean automatically converts logical TRUE/FALSE to numeric 1/0, and takes the arithmetic average. Conversely, characters and factors cannot be converted to a numeric format in any default way, and thus taking the mean cannot be done. 
+Taking the mean of the numeric and logical vectors in `p1_df` is successful; taking the mean of the character and factor vectors is not. This is intuitive for the numeric vector. In the case of the logical vector, the function `base::mean` automatically converts logical TRUE/FALSE to numeric 1/0, and takes the arithmetic average. Conversely, characters and factors cannot be converted to a numeric format in any default way, and thus taking the mean cannot be done. 
 
 The following code attempts to convert the logical, character, and factor vectors to numeric class. The logical vector successfully convert TRUE to 1 and FALSE to 0. The character and factor vectors are unable to convert to numeric, and instead return a list of NAs.
 
@@ -66,8 +66,6 @@ as.numeric(as.character(p1_df$factor_vec))
 ```{r p2}
 n = 1000 # number of rows in new data frame
 
-#set.seed(1) 
-
 # Create tbl_df
 p2_df = tibble(
   x = rnorm(n = n),
@@ -77,6 +75,7 @@ p2_df = tibble(
   factor_vec = as.factor(sum_gt_0) # coerced character vector of sum_gt_0
 )
 
+head(p2_df)
 ```
 
 
